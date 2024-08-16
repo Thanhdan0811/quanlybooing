@@ -25,7 +25,7 @@ public class ViewsController {
 
     @PostMapping("/add-views")
     public String addViews(@RequestBody ViewCreateRequestDTO viewsBody) {
-        System.out.println("View BOdy: "+ viewsBody);
+        System.out.println("View Body: "+ viewsBody);
         boolean isCreated = this.viewsService.save(ViewsMapper.ViewsReqToViewEntity(viewsBody));
         if(!isCreated) {
             return "thông tin lỗi không thể tạo views";

@@ -9,7 +9,7 @@ public class Mapper<T> {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public <O> O convertObject(T sourceObject, Class<O> destinationType) {
+	public <O> O mapper(T sourceObject, Class<O> destinationType) {
 		return modelMapper.map(sourceObject, destinationType);
 	}
 }
