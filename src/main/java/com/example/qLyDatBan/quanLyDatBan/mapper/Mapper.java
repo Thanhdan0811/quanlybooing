@@ -5,11 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Mapper<T> {
+public class Mapper {
+
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public <O> O mapper(T sourceObject, Class<O> destinationType) {
+	public <S, D> D map(S sourceObject, Class<D> destinationType) {
 		return modelMapper.map(sourceObject, destinationType);
 	}
 }
