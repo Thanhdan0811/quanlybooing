@@ -14,7 +14,7 @@ public class ViewsMapper {
         CategoryEntity categoryEntity = new CategoryEntity();
 
         viewsEntity.setName(viewBody.getName());
-        viewsEntity.setStatus(viewBody.getStatus());
+//        viewsEntity.setStatus(viewBody.getStatus());
         viewsEntity.setDesk_img(viewBody.getDesk_img());
         viewsEntity.setDescription(viewBody.getDescription());
         categoryEntity.setId(viewBody.getCategory_id());

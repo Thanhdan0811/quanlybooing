@@ -1,5 +1,6 @@
 package com.example.qLyDatBan.quanLyDatBan.service.impl;
 
+import com.example.qLyDatBan.quanLyDatBan.DTO.ViewsStatusDTO;
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.repository.CategoryRepository;
@@ -22,20 +23,20 @@ public class ViewsServiceImpl implements ViewsService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public boolean save(ViewsEntity viewsEntity) {
+    public ViewsEntity save(ViewsEntity viewsEntity) {
         try {
             int id = viewsEntity.getCategory().getId();
             Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
             viewsEntity.setCategory(null);
             if(categoryEntity.isEmpty()) {
-                return false;
+                return null;
             }
             categoryEntity.ifPresent(viewsEntity::setCategory);
-            this.viewsRepository.save(viewsEntity);
-            return true;
+
+            return this.viewsRepository.save(viewsEntity);
         } catch (Exception err) {
             err.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -63,6 +64,19 @@ public class ViewsServiceImpl implements ViewsService {
 
     @Override
     public Optional<ViewsEntity> findById(int Id) {
-        return Optional.empty();
+        return this.viewsRepository.findById(Id);
+    }
+
+    @Override
+    public ViewsEntity changeStatus(ViewsStatusDTO viewStatus) {
+
+//        Optional<ViewsEntity> viewsEntity = this.viewsRepository.findById(viewStatus.getView_id());
+
+//        if(viewsEntity.isEmpty()) return null;
+
+//        viewsEntity.get().setStatus(viewStatus.getStatus());
+
+//        return this.viewsRepository.save(viewsEntity.get());
+        return null;
     }
 }

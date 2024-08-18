@@ -7,13 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class ViewCreateRequestDTO {
-
-    String name;
-    String desk_img;
-    String description;
-    int category_id;
+@NoArgsConstructor
+@Builder
+public class ResponseBaseMessageDTO {
+    boolean status;
+    String message;
+    String error;
 }

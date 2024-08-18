@@ -1,10 +1,12 @@
 package com.example.qLyDatBan.quanLyDatBan.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Table(name = "views")
@@ -13,9 +15,6 @@ import java.util.Date;
 public class ViewsEntity extends BaseEntity {
     @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
-    private int status;
 
     @Column(nullable = false)
     private String desk_img;
@@ -29,13 +28,15 @@ public class ViewsEntity extends BaseEntity {
     @Column(nullable = true, insertable = false)
     private Date updateTime;
 
+    // được tham chiếu là JsonManage, tham chieu JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private CategoryEntity category;
 
-    @OneToOne(mappedBy = "views")
-    private BookingEntity booking;
+    @OneToMany(mappedBy = "views", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<BookingEntity> booking;
 
     @PrePersist
     protected void onCreate() {
@@ -45,5 +46,10 @@ public class ViewsEntity extends BaseEntity {
     @PreUpdate
     protected void onUpdate() {
         updateTime = new Date();
+    }
+
+    @Override
+    public String toString() {
+        return "t;hí is : " + this.getId() + "  " + this.getName();
     }
 }

@@ -1,19 +1,19 @@
 package com.example.qLyDatBan.quanLyDatBan.DTO;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class ViewCreateRequestDTO {
-
+@NoArgsConstructor
+public class CategoryGetDetailDTO {
+    int id;
     String name;
-    String desk_img;
     String description;
-    int category_id;
+    List<ViewDTO> listViews;
 }

@@ -17,13 +17,13 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public boolean save(CategoryEntity categoryEntity) {
+    public CategoryEntity save(CategoryEntity categoryEntity) {
         try {
-            this.categoryRepository.save(categoryEntity);
-            return true;
+            System.out.println("cấldfj");
+            return this.categoryRepository.save(categoryEntity);
         } catch (Exception err) {
             err.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -40,12 +40,31 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryEntity> findAll() {
-        return List.of();
+        return this.categoryRepository.findAll();
+    }
+
+    public boolean findByIdAndUpload(int id, CategoryEntity categoryEntity) {
+        Optional<CategoryEntity> categoryEn = this.findById(id);
+        if(categoryEn.isEmpty()) return false;
+
+        System.out.println("get id: " + categoryEn.get().getId());
+
+        if(!categoryEntity.getName().isEmpty()) {
+            categoryEn.get().setName(categoryEntity.getName());
+        }
+
+        if(!categoryEntity.getDescription().isEmpty()) {
+            categoryEn.get().setDescription(categoryEntity.getDescription());
+        }
+
+        this.categoryRepository.save(categoryEn.get());
+
+        return true;
     }
 
     @Override
     public Optional<CategoryEntity> findById(int Id) {
-        return categoryRepository.findById(Id);
+        return this.categoryRepository.findById(Id);
     }
 
 
