@@ -22,6 +22,12 @@ public class CategoryEntity extends BaseEntity {
 	@Column()
 	private String description;
 
+	@Column()
+	private String img_path;
+
+	@Column()
+	private int isDeleted;
+
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	private List<ViewsEntity> listViews;
