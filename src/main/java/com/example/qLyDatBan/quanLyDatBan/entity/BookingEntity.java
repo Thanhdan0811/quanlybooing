@@ -1,10 +1,16 @@
 package com.example.qLyDatBan.quanLyDatBan.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Table(name = "booking")
 @Data
@@ -27,11 +33,12 @@ public class BookingEntity extends BaseEntity {
 
 	@ManyToOne()
 	@JoinColumn(name = "customer_id")
-	@JsonBackReference
+	@JsonManagedReference
 	private CustomerDetailEntity customerDetail;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "views_id", referencedColumnName = "id")
+	@ManyToOne()
+	@JoinColumn(name = "views_id", nullable = false)
+	@JsonManagedReference
 	private ViewsEntity views;
 
 }

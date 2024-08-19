@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class ErrorResponse {
-	private int statusCode;
-	private String message;
-
+@AllArgsConstructor
+public class ViewDTO extends BaseDTO {
+	String name;
+	String desk_img;
+	String description;
+	int category_id;
 }

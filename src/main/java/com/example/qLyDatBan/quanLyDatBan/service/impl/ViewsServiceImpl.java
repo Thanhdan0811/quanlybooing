@@ -21,20 +21,20 @@ public class ViewsServiceImpl implements ViewsService {
 	private CategoryRepository categoryRepository;
 
 	@Override
-	public boolean save(ViewsEntity viewsEntity, String mode) {
+	public ViewsEntity save(ViewsEntity viewsEntity, String mode) {
 		try {
 			int id = viewsEntity.getCategory().getId();
 			Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
 			viewsEntity.setCategory(null);
 			if (categoryEntity.isEmpty()) {
-				return false;
+				return null;
 			}
 			categoryEntity.ifPresent(viewsEntity::setCategory);
 			this.viewsRepository.save(viewsEntity);
-			return true;
+			return viewsEntity;
 		} catch (Exception err) {
 			err.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 
@@ -67,6 +67,6 @@ public class ViewsServiceImpl implements ViewsService {
 
 	@Override
 	public Optional<ViewsEntity> findById(int Id) {
-		return Optional.empty();
+		return this.viewsRepository.findById(Id);
 	}
 }

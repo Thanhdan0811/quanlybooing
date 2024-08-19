@@ -9,10 +9,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewCreateRequestDTO {
+public class BookingDTO extends BaseDTO {
 
 	String name;
-	String desk_img;
-	String description;
-	int category_id;
+	String phone;
+	String email;
+	int view_id;
+	int booking_status;
+	String addition_note;
+	String arrived_time;
+	String expected_time;
+	String booking_date;
+
 }

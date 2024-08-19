@@ -13,11 +13,11 @@ import java.util.Optional;
 @Service
 public class CustomerDetailServiceImpl implements CustomerDetailService {
 	@Autowired
-	private CustomerDetailRepository customerRepo;
+	private CustomerDetailRepository cusDetailRepository;
 
 	@Override
-	public boolean save(CustomerDetailEntity customerDetailEntity, String mode) {
-		return false;
+	public CustomerDetailEntity save(CustomerDetailEntity customerDetailEntity, String mode) {
+		return this.cusDetailRepository.save(customerDetailEntity);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
 	public boolean deleteById(int id) {
 		Optional<CustomerDetailEntity> existed = findById(id);
 		if (existed.isPresent()) {
-			customerRepo.deleteById(id);
+			cusDetailRepository.deleteById(id);
 			return true;
 		}
 		return false;
@@ -37,11 +37,12 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
 
 	@Override
 	public List<CustomerDetailEntity> findAll() {
-		return List.of();
+		return cusDetailRepository.findAll();
 	}
 
 	@Override
-	public Optional<CustomerDetailEntity> findById(int Id) {
-		return Optional.empty();
+	public Optional<CustomerDetailEntity> findById(int id) {
+		Optional<CustomerDetailEntity> existing = cusDetailRepository.findById(id);
+		return existing;
 	}
 }

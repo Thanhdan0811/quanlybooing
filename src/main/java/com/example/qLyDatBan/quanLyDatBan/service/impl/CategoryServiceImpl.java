@@ -18,31 +18,34 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+	// add và update
+	// dùng mode để định nghĩa là add hay update
 	@Override
-	public boolean save(CategoryEntity category, String mode) {
+	public CategoryEntity save(CategoryEntity category, String mode) {
 		try {
 			if (mode.equals("update")) {
-				Optional<CategoryEntity> exist = categoryRepository.findById(category.getId());
-				System.out.println(exist.get().getId());
-				if (!exist.isPresent()) {
-					throw new RuntimeException("Category not found");
+				Optional<CategoryEntity> existing = categoryRepository.findById(category.getId());
+				if (!existing.isPresent()) {
+					return null;
 				}
+
+				CategoryEntity oldCategory = existing.get();
 				if (category.getName().isEmpty()) {
-					category.setName(exist.get().getName());
+					category.setName(oldCategory.getName());
 				}
 				if (category.getDescription().isEmpty()) {
-					category.setDescription(exist.get().getDescription());
+					category.setDescription(oldCategory.getDescription());
 				}
 
 				List<ViewsEntity> views = new ArrayList<ViewsEntity>();
-				views = exist.get().getListViews();
+				views = oldCategory.getListViews();
 				category.setListViews(views);
 			}
 			this.categoryRepository.save(category);
-			return true;
+			return category;
 		} catch (Exception err) {
 			err.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 
@@ -77,4 +80,35 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepository.findById(id);
 	}
 
+	// Cái này là update hay upload???
+	public boolean findByIdAndUpload(int id, CategoryEntity categoryEntity) {
+		Optional<CategoryEntity> categoryEn = this.findById(id);
+		if (categoryEn.isEmpty())
+			return false;
+
+		System.out.println("get id: " + categoryEn.get().getId());
+
+		if (!categoryEntity.getName().isEmpty()) {
+			categoryEn.get().setName(categoryEntity.getName());
+		}
+
+		if (!categoryEntity.getDescription().isEmpty()) {
+			categoryEn.get().setDescription(categoryEntity.getDescription());
+		}
+
+		this.categoryRepository.save(categoryEn.get());
+
+		return true;
+	}
+
+	public List<ViewsEntity> getViewsById(int id) {
+		Optional<CategoryEntity> category = this.findById(id);
+		if (!category.isPresent()) {
+			return null;
+		}
+
+		CategoryEntity existing = category.get();
+		List<ViewsEntity> views = existing.getListViews();
+		return views;
+	}
 }

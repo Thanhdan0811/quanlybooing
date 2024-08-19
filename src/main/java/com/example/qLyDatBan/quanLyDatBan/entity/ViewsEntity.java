@@ -1,10 +1,17 @@
 package com.example.qLyDatBan.quanLyDatBan.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import lombok.Data;
+import java.util.List;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Table(name = "views")
 @Data
@@ -12,9 +19,6 @@ import java.util.Date;
 public class ViewsEntity extends BaseEntity {
 	@Column(nullable = false)
 	private String name;
-
-	@Column(nullable = false)
-	private int status;
 
 	@Column(nullable = false)
 	private String desk_img;
@@ -27,7 +31,8 @@ public class ViewsEntity extends BaseEntity {
 	@JsonBackReference
 	private CategoryEntity category;
 
-	@OneToOne(mappedBy = "views")
-	private BookingEntity booking;
+	@OneToMany(mappedBy = "views", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonBackReference
+	private List<BookingEntity> booking;
 
 }

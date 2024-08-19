@@ -6,7 +6,9 @@ import java.util.Optional;
 import com.example.qLyDatBan.quanLyDatBan.DTO.CategoryDTO;
 
 public interface BaseService<T> {
-	boolean save(T t, String mode);
+
+	// trả ra object để kiểm tra cho cả add và update
+	T save(T t, String mode);
 
 	boolean delete(T t);
 
