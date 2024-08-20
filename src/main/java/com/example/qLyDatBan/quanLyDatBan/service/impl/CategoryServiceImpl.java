@@ -25,15 +25,17 @@ public class CategoryServiceImpl implements CategoryService {
 		try {
 			if (mode.equals("update")) {
 				Optional<CategoryEntity> existing = categoryRepository.findById(category.getId());
-				if (!existing.isPresent()) {
+				if (existing.isEmpty()) {
 					return null;
 				}
 
+				System.out.println("Chạy vaò đây." + category.getName());
+
 				CategoryEntity oldCategory = existing.get();
-				if (category.getName().isEmpty()) {
+				if (category.getName() == null || category.getName().isEmpty()) {
 					category.setName(oldCategory.getName());
 				}
-				if (category.getDescription().isEmpty()) {
+				if (category.getDescription() == null || category.getDescription().isEmpty()) {
 					category.setDescription(oldCategory.getDescription());
 				}
 

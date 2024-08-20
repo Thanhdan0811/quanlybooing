@@ -56,10 +56,8 @@ public class ViewsServiceImpl implements ViewsService {
 	@Override
 	public List<ViewsEntity> findAll() {
 		List<ViewsEntity> viewsEntities = viewsRepository.findAll();
-		if (!viewsEntities.isEmpty()) {
-			for (ViewsEntity view : viewsEntities) {
-				System.out.println(view.getCategory());
-			}
+		if (viewsEntities.isEmpty()) {
+			return null;
 		}
 
 		return viewsEntities;

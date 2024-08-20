@@ -109,6 +109,7 @@ public class CategoryController {
 	@PutMapping("/detail-{id}")
 	public ResponseEntity<?> update(@PathVariable int id, @RequestBody CategoryDTO categoryDTO) {
 		CategoryEntity categoryEntity = mapper.map(categoryDTO, CategoryEntity.class);
+		categoryEntity.setId(id);
 		CategoryEntity updatedCategory = this.categoryService.save(categoryEntity, "update");
 		CategoryDTO updatedDTO = mapper.map(categoryEntity, CategoryDTO.class);
 		if (updatedCategory != null) {

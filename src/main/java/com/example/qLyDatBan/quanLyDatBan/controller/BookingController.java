@@ -3,6 +3,7 @@ package com.example.qLyDatBan.quanLyDatBan.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.qLyDatBan.quanLyDatBan.DTO.BookingResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,19 +32,19 @@ public class BookingController {
 	private Mapper mapper;
 
 	@GetMapping("/all")
-	public List<BookingDTO> getAllBooking() {
+	public List<BookingResponseDTO> getAllBooking() {
 		List<BookingEntity> bookings = this.bookingService.findAll();
-		List<BookingDTO> bookingsDTO = new ArrayList<>();
+		List<BookingResponseDTO> bookingsDTO = new ArrayList<>();
 
 		for (BookingEntity book : bookings) {
-			bookingsDTO.add(mapper.map(book, BookingDTO.class));
+			bookingsDTO.add(mapper.map(book, BookingResponseDTO.class));
 		}
 		return bookingsDTO;
 	}
 
 	@PostMapping("/add-booking")
 	public ResponseEntity<?> addBooking(@RequestBody BookingDTO bookingBody) {
-		BookingEntity saveBooking = this.bookingService.save(mapper.map(bookingBody, BookingEntity.class), "add");
+		BookingEntity saveBooking = this.bookingService.save(mapper.mapBookingCreate(bookingBody, BookingEntity.class), "add");
 		if (saveBooking == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Booking không thành công"));

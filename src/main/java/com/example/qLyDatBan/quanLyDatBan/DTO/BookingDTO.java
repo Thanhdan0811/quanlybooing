@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingDTO extends BaseDTO {
+public class BookingDTO  {
 
 	String name;
 	String phone;
@@ -17,8 +19,6 @@ public class BookingDTO extends BaseDTO {
 	int view_id;
 	int booking_status;
 	String addition_note;
-	String arrived_time;
-	String expected_time;
-	String booking_date;
+	Date booking_date;
 
 }

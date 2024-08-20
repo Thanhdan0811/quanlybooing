@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class CategoryDTO extends BaseDTO {
 	String name;
 	String description;
-	List<ViewDTO> listViews;
+//	List<ViewDTO> listViews;
 }

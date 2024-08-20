@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.qLyDatBan.quanLyDatBan.DTO.Response;
-import com.example.qLyDatBan.quanLyDatBan.DTO.ViewCreateRequestDTO;
+import com.example.qLyDatBan.quanLyDatBan.DTO.ViewResponseDTO;
 import com.example.qLyDatBan.quanLyDatBan.DTO.ViewDTO;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.mapper.Mapper;
@@ -32,20 +32,22 @@ public class ViewsController {
 	private Mapper mapper;
 
 	@GetMapping("/all")
-	public List<ViewDTO> getAllViews() {
+	public List<ViewResponseDTO> getAllViews() {
 		// maper DTO
 		List<ViewsEntity> viewEs = this.viewsService.findAll();
-		List<ViewDTO> viewDs = new ArrayList<>();
+		List<ViewResponseDTO> viewDs = new ArrayList<>();
+		if(viewEs == null) return null;
+		System.out.println("viewEs : " + viewEs.size());
 		for (ViewsEntity view : viewEs) {
-			viewDs.add(mapper.map(view, ViewDTO.class));
+			viewDs.add(mapper.map(view, ViewResponseDTO.class));
 		}
 		return viewDs;
 	}
 
 	@PostMapping("/add-views")
-	public ResponseEntity<?> addViews(@RequestBody ViewCreateRequestDTO view) {
+	public ResponseEntity<?> addViews(@RequestBody ViewDTO view) {
 		System.out.println("View Body: " + view);
-		ViewsEntity viewEntity = mapper.map(view, ViewsEntity.class);
+		ViewsEntity viewEntity = mapper.mapViewCreate(view, ViewsEntity.class);
 		ViewsEntity isCreated = this.viewsService.save(viewEntity, "add");
 		if (isCreated == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.qLyDatBan.quanLyDatBan.DTO.BookingTimeQuery;
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.CustomerDetailEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
@@ -33,47 +32,14 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public BookingEntity save(BookingEntity bookingEntity, String mode) {
 		// check view existed
-		Optional<ViewsEntity> viewEntity = this.viewsService.findById(bookingEntity.getViews().getId());
+		Optional<ViewsEntity> viewEntity = this.viewsService.findById(bookingEntity.getView().getId());
+		System.out.println("View Entity: " + bookingEntity.getView().getId());
 		if (viewEntity.isEmpty())
 			return null;
 
-		bookingEntity.setViews(viewEntity.get());
+		bookingEntity.setView(viewEntity.get());
 
 		// Check arrived time and expected time is available.
-
-		System.out.println("viewEntity.get() " + viewEntity + "  " + bookingEntity.getBooking_date());
-
-		List<BookingTimeQuery> listBook = this.bookingRepository.findFilterBy(viewEntity.get(),
-				bookingEntity.getBooking_date());
-
-		System.out.println("listBook" + listBook);
-
-		if (bookingEntity.getArrived_time().getTime() >= bookingEntity.getExpected_time().getTime()) {
-			System.out.println("thời gian arrived không được sau thời gian expected.");
-			return null;
-		}
-
-		for (BookingTimeQuery bookingTime : listBook) {
-			long arrivedTime = bookingTime.getArrived_time().getTime();
-			long expectedTime = bookingTime.getExpected_time().getTime();
-			long newArrivedTime = bookingEntity.getArrived_time().getTime();
-			long newExpectedTime = bookingEntity.getExpected_time().getTime();
-			System.out.println("chạy vào đây");
-
-			System.out.println("check 1" + "  " + newArrivedTime + "  " + arrivedTime);
-			System.out.println("check 2" + "  " + newArrivedTime + "  " + arrivedTime);
-			System.out.println("check 3" + "  " + newArrivedTime + "  " + arrivedTime);
-			System.out.println("check 4" + "  " + newArrivedTime + "  " + arrivedTime);
-
-			if ((newArrivedTime >= arrivedTime && newArrivedTime <= expectedTime)
-					|| (newExpectedTime >= arrivedTime && newExpectedTime <= expectedTime)) {
-				System.out.println("thời gian booking đã được đặt trước đó.");
-				return null;
-			}
-
-		}
-
-//        return null;
 
 		// create customer entity
 		CustomerDetailEntity customerEntity = this.cusDetailService.save(bookingEntity.getCustomerDetail(), "add");

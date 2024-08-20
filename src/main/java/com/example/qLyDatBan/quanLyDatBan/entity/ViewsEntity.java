@@ -4,13 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Table(name = "views")
@@ -31,8 +25,8 @@ public class ViewsEntity extends BaseEntity {
 	@JsonBackReference
 	private CategoryEntity category;
 
-	@OneToMany(mappedBy = "views", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "view")
 	@JsonBackReference
-	private List<BookingEntity> booking;
+	private BookingEntity booking;
 
 }

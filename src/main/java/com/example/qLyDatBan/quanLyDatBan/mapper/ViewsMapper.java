@@ -1,7 +1,8 @@
 package com.example.qLyDatBan.quanLyDatBan.mapper;
 
 
-import com.example.qLyDatBan.quanLyDatBan.DTO.ViewCreateRequestDTO;
+import com.example.qLyDatBan.quanLyDatBan.DTO.ViewDTO;
+import com.example.qLyDatBan.quanLyDatBan.DTO.ViewResponseDTO;
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import lombok.Builder;
 @Builder
 public class ViewsMapper {
 
-    public static ViewsEntity ViewsReqToViewEntity(ViewCreateRequestDTO viewBody) {
+    public static ViewsEntity ViewsReqToViewEntity(ViewDTO viewBody) {
         ViewsEntity viewsEntity = new ViewsEntity();
         CategoryEntity categoryEntity = new CategoryEntity();
 
