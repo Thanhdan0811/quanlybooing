@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewCreateRequestDTO {
-
+public class ViewDTO extends BaseDTO {
 	String name;
 	String desk_img;
 	String description;

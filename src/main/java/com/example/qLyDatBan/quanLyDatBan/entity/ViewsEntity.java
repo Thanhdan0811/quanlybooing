@@ -1,49 +1,38 @@
 package com.example.qLyDatBan.quanLyDatBan.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
-
-import java.util.Date;
-
 
 @Table(name = "views")
 @Data
 @Entity
 public class ViewsEntity extends BaseEntity {
-    @Column(nullable = false)
-    private String name;
+	@Column(nullable = false)
+	private String name;
 
-    @Column(nullable = false)
-    private int status;
+	@Column(nullable = false)
+	private String desk_img;
 
-    @Column(nullable = false)
-    private String desk_img;
+	@Column(nullable = true)
+	private String description;
 
-    @Column(nullable = true)
-    private String description;
+	@ManyToOne()
+	@JoinColumn(name = "category_id", nullable = false)
+	@JsonBackReference
+	private CategoryEntity category;
 
-    @Column(nullable = true, updatable = false)
-    private Date createTime;
+	@OneToMany(mappedBy = "views", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonBackReference
+	private List<BookingEntity> booking;
 
-    @Column(nullable = true, insertable = false)
-    private Date updateTime;
-
-    @ManyToOne()
-    @JoinColumn(name = "category_id", nullable = false)
-    @JsonBackReference
-    private CategoryEntity category;
-
-    @OneToOne(mappedBy = "views")
-    private BookingEntity booking;
-
-    @PrePersist
-    protected void onCreate() {
-        createTime = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updateTime = new Date();
-    }
 }
