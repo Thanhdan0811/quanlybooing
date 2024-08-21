@@ -44,13 +44,21 @@ public class BookingController {
 
 	@PostMapping("/add-booking")
 	public ResponseEntity<?> addBooking(@RequestBody BookingDTO bookingBody) {
-		BookingEntity saveBooking = this.bookingService.save(mapper.mapBookingCreate(bookingBody, BookingEntity.class), "add");
-		if (saveBooking == null) {
+		try {
+			BookingEntity saveBooking = this.bookingService.save(mapper.mapBookingCreate(bookingBody, BookingEntity.class), "add");
+			if (saveBooking == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Booking không thành công"));
+			}
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new Response<>(HttpStatus.CREATED.value(), "Booking đã được tạo"));
+		} catch (RuntimeException e) {
+
+			String message = e.getMessage().replace("java.lang.RuntimeException:", "").trim();
+
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Booking không thành công"));
+					.body(new Response<>(HttpStatus.NOT_FOUND.value(), message));
 		}
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(new Response<>(HttpStatus.CREATED.value(), "Booking đã được tạo"));
 	}
 
 	@PostMapping("/update-status")

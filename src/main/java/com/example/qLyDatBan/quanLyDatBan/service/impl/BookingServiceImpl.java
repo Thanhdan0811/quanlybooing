@@ -1,5 +1,7 @@
 package com.example.qLyDatBan.quanLyDatBan.service.impl;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,24 +33,48 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public BookingEntity save(BookingEntity bookingEntity, String mode) {
-		// check view existed
-		Optional<ViewsEntity> viewEntity = this.viewsService.findById(bookingEntity.getView().getId());
-		System.out.println("View Entity: " + bookingEntity.getView().getId());
-		if (viewEntity.isEmpty())
-			return null;
+		try {
+			// check view existed
+			Optional<ViewsEntity> viewEntity = this.viewsService.findById(bookingEntity.getViews().getId());
+			System.out.println("View Entity: " + bookingEntity.getViews().getId());
+			if (viewEntity.isEmpty())
+				return null;
 
-		bookingEntity.setView(viewEntity.get());
+			bookingEntity.setViews(viewEntity.get());
+			System.out.println("Trước khi đến bước này");
+			// Check arrived time and expected time is available.
+			LocalDate dateNow = LocalDate.now();
 
-		// Check arrived time and expected time is available.
+			System.out.println("CheckViewHasBookAtDate: " + bookingEntity.getBooking_date() +
+					"  " + dateNow +
+					"  " + bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow));
 
-		// create customer entity
-		CustomerDetailEntity customerEntity = this.cusDetailService.save(bookingEntity.getCustomerDetail(), "add");
-		if (customerEntity == null)
-			return null;
+			if(bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow)) {
+				throw new RuntimeException("Thời gian đặt phải từ thời điểm hiện tại.");
+//				return null;
+			}
+			int checkExists = this.bookingRepository.
+					CheckViewHasBookAtDate(bookingEntity.getViews().getId(), bookingEntity.getBooking_date());
 
-		bookingEntity.setCustomerDetail(customerEntity);
 
-		return this.bookingRepository.save(bookingEntity);
+
+
+			if(checkExists > 0) {
+				throw new RuntimeException("Ngày đặt và view đã được booking trước đó.");
+			}
+
+			// create customer entity
+			CustomerDetailEntity customerEntity = this.cusDetailService.save(bookingEntity.getCustomerDetail(), "add");
+			if (customerEntity == null)
+				return null;
+
+			bookingEntity.setCustomerDetail(customerEntity);
+
+			return this.bookingRepository.save(bookingEntity);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	@Override

@@ -25,8 +25,8 @@ public class ViewsEntity extends BaseEntity {
 	@JsonBackReference
 	private CategoryEntity category;
 
-	@OneToOne(mappedBy = "view")
+	@OneToMany(mappedBy = "views", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonBackReference
-	private BookingEntity booking;
+	private List<BookingEntity> booking;
 
 }

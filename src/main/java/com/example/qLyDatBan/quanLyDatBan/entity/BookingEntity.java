@@ -28,8 +28,9 @@ public class BookingEntity extends BaseEntity {
 	@JsonManagedReference
 	private CustomerDetailEntity customerDetail;
 
-	@OneToOne
+	@ManyToOne()
+	@JoinColumn(name = "views_id", nullable = false)
 	@JsonManagedReference
-	private ViewsEntity view;
+	private ViewsEntity views;
 
 }

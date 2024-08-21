@@ -32,7 +32,7 @@ public class Mapper {
 		customerDetail.setPhone(sourceObject.getPhone());
 
 		bookingEntity.setCustomerDetail(customerDetail);
-		bookingEntity.setView(viewsEntity);
+		bookingEntity.setViews(viewsEntity);
 
 
 		return bookingEntity;
