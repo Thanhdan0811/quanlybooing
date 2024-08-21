@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.qLyDatBan.quanLyDatBan.DTO.CategoryResponseDetailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,11 @@ public class CategoryController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy Category"));
 		}
+<<<<<<< HEAD
 		CategoryResponseDTO categoryDTO = mapper.map(cateEntity, CategoryResponseDTO.class);
+=======
+		CategoryResponseDetailDTO categoryDTO = mapper.map(cateEntity, CategoryResponseDetailDTO.class);
+>>>>>>> branch 'main' of https://github.com/Thanhdan0811/quanlybooing.git
 		return ResponseEntity.ok(categoryDTO);
 	}
 
@@ -115,6 +120,7 @@ public class CategoryController {
 	@PutMapping("/detail-{id}")
 	public ResponseEntity<?> update(@PathVariable int id, @RequestBody CategoryDTO categoryDTO) {
 		CategoryEntity categoryEntity = mapper.map(categoryDTO, CategoryEntity.class);
+		categoryEntity.setId(id);
 		CategoryEntity updatedCategory = this.categoryService.save(categoryEntity, "update");
 		CategoryDTO updatedDTO = mapper.map(categoryEntity, CategoryDTO.class);
 		if (updatedCategory != null) {

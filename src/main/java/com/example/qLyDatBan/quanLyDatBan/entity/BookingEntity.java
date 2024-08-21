@@ -22,7 +22,7 @@ public class BookingEntity extends BaseEntity {
 	private int booking_status;
 
 	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-ss")
 	private java.sql.Date booking_date;
 
 	@Column(nullable = true)
@@ -33,9 +33,9 @@ public class BookingEntity extends BaseEntity {
 	@JsonManagedReference
 	private CustomerDetailEntity customerDetail;
 
-	@OneToOne()
+	@ManyToOne()
 	@JoinColumn(name = "views_id", nullable = false)
 	@JsonManagedReference
-	private ViewsEntity view;
+	private ViewsEntity views;
 
 }

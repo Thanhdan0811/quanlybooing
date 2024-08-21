@@ -14,5 +14,9 @@ import lombok.NoArgsConstructor;
 public class CategoryDTO {
 	String name;
 	String description;
+<<<<<<< HEAD
 	String img_path;
+=======
+//	List<ViewDTO> listViews;
+>>>>>>> branch 'main' of https://github.com/Thanhdan0811/quanlybooing.git
 }
