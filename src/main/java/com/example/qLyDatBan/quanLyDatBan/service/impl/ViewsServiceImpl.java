@@ -24,6 +24,7 @@ public class ViewsServiceImpl implements ViewsService {
 	public ViewsEntity save(ViewsEntity viewsEntity, String mode) {
 		try {
 			int id = viewsEntity.getCategory().getId();
+			System.out.println(id);
 			Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
 			viewsEntity.setCategory(null);
 			if (categoryEntity.isEmpty()) {
@@ -38,16 +39,15 @@ public class ViewsServiceImpl implements ViewsService {
 		}
 	}
 
-	@Override
-	public boolean delete(ViewsEntity viewsEntity) {
-		return true;
-	}
-
+	// delete mềm
+	// 0 là đang sử dụng
+	// 1 là xóa
 	@Override
 	public boolean deleteById(int id) {
-		Optional<ViewsEntity> existed = findById(id);
-		if (existed.isPresent()) {
-			viewsRepository.deleteById(id);
+		Optional<ViewsEntity> existing = findById(id);
+		if (existing.isPresent()) {
+			ViewsEntity view = existing.get();
+			view.setIsDeleted(1);
 			return true;
 		}
 		return false;
@@ -68,5 +68,12 @@ public class ViewsServiceImpl implements ViewsService {
 	@Override
 	public Optional<ViewsEntity> findById(int Id) {
 		return this.viewsRepository.findById(Id);
+	}
+
+	@Override
+	public List<ViewsEntity> findAllByIsDeleted(int number) {
+		List<ViewsEntity> views = viewsRepository.findAllByIsDeleted(number);
+		return views;
+
 	}
 }

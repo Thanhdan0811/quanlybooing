@@ -9,6 +9,7 @@
 		<version>3.3.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.example.qLyDatBan</groupId>
 	<artifactId>quanLyDatBan</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -87,6 +88,7 @@
 						</exclude>
 					</excludes>
 				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>

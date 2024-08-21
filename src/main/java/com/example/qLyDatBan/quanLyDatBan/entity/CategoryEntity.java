@@ -26,9 +26,16 @@ public class CategoryEntity extends BaseEntity {
 	private String img_path;
 
 	@Column()
-	private int isDeleted;
+	private int isDeleted = 0;
 
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	private List<ViewsEntity> listViews;
+
+	@PrePersist
+	protected void onCreate() {
+		if (isDeleted == 0) {
+			isDeleted = 0; // This ensures that isDeleted is set to 0 before persisting if not already set
+		}
+	}
 }

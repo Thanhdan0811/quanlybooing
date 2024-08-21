@@ -10,8 +10,6 @@ public interface BaseService<T> {
 	// trả ra object để kiểm tra cho cả add và update
 	T save(T t, String mode);
 
-	boolean delete(T t);
-
 	boolean deleteById(int id);
 
 	List<T> findAll();

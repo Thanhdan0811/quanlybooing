@@ -7,10 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.StreamingHttpOutputMessage.Body;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.qLyDatBan.quanLyDatBan.DTO.CategoryDTO;
+import com.example.qLyDatBan.quanLyDatBan.DTO.CategoryResponseDTO;
 import com.example.qLyDatBan.quanLyDatBan.DTO.Response;
-import com.example.qLyDatBan.quanLyDatBan.DTO.ViewDTO;
+import com.example.qLyDatBan.quanLyDatBan.DTO.ViewResponseDTO;
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.mapper.Mapper;
@@ -42,15 +42,16 @@ public class CategoryController {
 	private CategoryServiceImpl serviceImpl;
 
 	@GetMapping("/all")
-	public List<CategoryDTO> getAllCategories() {
+	public List<CategoryResponseDTO> getAllCategories() {
 		List<CategoryEntity> entity = categoryService.findAll();
-		List<CategoryDTO> categories = new ArrayList<>();
+		List<CategoryResponseDTO> categories = new ArrayList<>();
 		for (CategoryEntity categoryEntity : entity) {
-			categories.add(mapper.map(categoryEntity, CategoryDTO.class));
+			categories.add(mapper.map(categoryEntity, CategoryResponseDTO.class));
 		}
 		return categories;
 	}
 
+	// Lấy ra 1 category cụ thể dựa vào id
 	@GetMapping("/detail-{id}")
 	public ResponseEntity<?> getCategoryById(@PathVariable int id) {
 		Optional<CategoryEntity> cateEntity = this.categoryService.findById(id);
@@ -58,7 +59,7 @@ public class CategoryController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy Category"));
 		}
-		CategoryDTO categoryDTO = mapper.map(cateEntity, CategoryDTO.class);
+		CategoryResponseDTO categoryDTO = mapper.map(cateEntity, CategoryResponseDTO.class);
 		return ResponseEntity.ok(categoryDTO);
 	}
 
@@ -81,28 +82,33 @@ public class CategoryController {
 
 	}
 
+	// Lấy các views từ 1 category cụ thể
 	@GetMapping("/getViews/{id}")
 	public ResponseEntity<?> getViewsByCategory(@PathVariable int id) {
 		List<ViewsEntity> viewsEntity = serviceImpl.getViewsById(id);
 		if (viewsEntity == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "This category is not found"));
+					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy category này."));
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(new Response<>(HttpStatus.OK.value(), "", viewsEntity));
+		List<ViewResponseDTO> views = new ArrayList<>();
+		for (ViewsEntity view : viewsEntity) {
+			views.add(mapper.map(view, ViewResponseDTO.class));
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(new Response<>(HttpStatus.OK.value(), "", views));
 	}
 
-	// delete cứng
-	@DeleteMapping("/delete/{id}")
+	// delete mềm
+	@PatchMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable int id) {
 		if (id == 0) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new Response<>(HttpStatus.BAD_REQUEST.value(), "Không tìm thấy ID"));
 		} else if (categoryService.deleteById(id)) {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response<>(HttpStatus.OK.value(), "Delete successful!"));
+					.body(new Response<>(HttpStatus.OK.value(), "Đã xóa thành công!"));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response<>(HttpStatus.NOT_FOUND.value(), "This category is not found"));
+				.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy category này."));
 	}
 
 	// Trả ra Object nếu update thành công

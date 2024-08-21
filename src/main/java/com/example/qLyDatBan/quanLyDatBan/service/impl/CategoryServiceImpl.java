@@ -49,21 +49,19 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 	}
 
-	@Override
-	public boolean delete(CategoryEntity categoryEntity) {
-		Optional<CategoryEntity> existed = findById(categoryEntity.getId());
-		if (existed.isPresent()) {
-			categoryRepository.delete(categoryEntity);
-			return true;
-		}
-		return false;
-	}
-
+	// delete mềm
+	// 0 là đang sử dụng
+	// 1 là xoá
 	@Override
 	public boolean deleteById(int id) {
-		Optional<CategoryEntity> existed = findById(id);
-		if (existed.isPresent()) {
-			categoryRepository.deleteById(id);
+		Optional<CategoryEntity> existing = findById(id);
+		if (existing.isPresent()) {
+			CategoryEntity category = existing.get();
+			category.setIsDeleted(1);
+			List<ViewsEntity> views = this.getViewsById(id);
+			for (ViewsEntity viewsEntity : views) {
+				viewsEntity.setIsDeleted(1);
+			}
 			return true;
 		}
 		return false;
@@ -110,5 +108,11 @@ public class CategoryServiceImpl implements CategoryService {
 		CategoryEntity existing = category.get();
 		List<ViewsEntity> views = existing.getListViews();
 		return views;
+	}
+
+	@Override
+	public List<CategoryEntity> findAllByIsDeleted(int number) {
+		List<CategoryEntity> deletedList = categoryRepository.findAllByIsDeleted(number);
+		return deletedList;
 	}
 }

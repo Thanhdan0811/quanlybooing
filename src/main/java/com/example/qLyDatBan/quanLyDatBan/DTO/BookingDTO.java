@@ -1,5 +1,7 @@
 package com.example.qLyDatBan.quanLyDatBan.DTO;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +19,6 @@ public class BookingDTO extends BaseDTO {
 	int view_id;
 	int booking_status;
 	String addition_note;
-	String arrived_time;
-	String expected_time;
-	String booking_date;
+	Date booking_date;
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +42,7 @@ public class BookingController {
 		return bookingsDTO;
 	}
 
+	// Tạo đơn từ phía khách hàng
 	@PostMapping("/add-booking")
 	public ResponseEntity<?> addBooking(@RequestBody BookingDTO bookingBody) {
 		BookingEntity saveBooking = this.bookingService.save(mapper.map(bookingBody, BookingEntity.class), "add");
@@ -52,7 +54,8 @@ public class BookingController {
 				.body(new Response<>(HttpStatus.CREATED.value(), "Booking đã được tạo"));
 	}
 
-	@PostMapping("/update-status")
+	// Thay đổi trạng thái
+	@PutMapping("/update-status")
 	public boolean updateBookingStatus(@RequestBody int bookingStatus) {
 
 		boolean isUpdated = this.bookingService.changeStatus(bookingStatus);
