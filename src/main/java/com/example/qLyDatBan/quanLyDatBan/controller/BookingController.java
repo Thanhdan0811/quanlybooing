@@ -9,10 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.qLyDatBan.quanLyDatBan.DTO.BookingDTO;
@@ -47,13 +49,15 @@ public class BookingController {
 	@PostMapping("/add-booking")
 	public ResponseEntity<?> addBooking(@RequestBody BookingDTO bookingBody) {
 		try {
-			BookingEntity saveBooking = this.bookingService.save(mapper.mapBookingCreate(bookingBody, BookingEntity.class), "add");
+			BookingEntity saveBooking = this.bookingService
+					.save(mapper.mapBookingCreate(bookingBody, BookingEntity.class), "add");
 			if (saveBooking == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Booking không thành công"));
 			}
+			BookingResponseDTO newBooking = mapper.map(saveBooking, BookingResponseDTO.class);
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new Response<>(HttpStatus.CREATED.value(), "Booking đã được tạo"));
+					.body(new Response<>(HttpStatus.CREATED.value(), "Booking đã được tạo", newBooking));
 		} catch (RuntimeException e) {
 
 			String message = e.getMessage().replace("java.lang.RuntimeException:", "").trim();
@@ -65,11 +69,17 @@ public class BookingController {
 
 	// Thay đổi trạng thái
 	@PutMapping("/update-status")
-	public boolean updateBookingStatus(@RequestBody int bookingStatus) {
+	public ResponseEntity<?> updateBookingStatus(@RequestParam int id, int status) {
 
-		boolean isUpdated = this.bookingService.changeStatus(bookingStatus);
+		BookingEntity isUpdated = this.bookingService.changeStatus(id, status);
 
-		return isUpdated;
+		if (isUpdated == null) {
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
+					.body(new Response<>(HttpStatus.NOT_MODIFIED.value(), "Update không thành công."));
+		}
+		BookingResponseDTO booking = mapper.map(isUpdated, BookingResponseDTO.class);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response<>(HttpStatus.OK.value(), "Update thành công.", booking));
 	}
 
 }

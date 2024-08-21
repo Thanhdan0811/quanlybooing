@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
+import com.example.qLyDatBan.quanLyDatBan.entity.CustomerDetailEntity;
+import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.repository.BookingRepository;
 import com.example.qLyDatBan.quanLyDatBan.service.BookingService;
 import com.example.qLyDatBan.quanLyDatBan.service.CustomerDetailService;
@@ -47,20 +49,17 @@ public class BookingServiceImpl implements BookingService {
 			System.out.println("Trước khi đến bước này");
 			// Check arrived time and expected time is available.
 			LocalDate dateNow = LocalDate.now();
-			System.out.println("CheckViewHasBookAtDate: " + bookingEntity.getBooking_date() +
-					"  " + dateNow +
-					"  " + bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow));
+			System.out.println("CheckViewHasBookAtDate: " + bookingEntity.getBooking_date() + "  " + dateNow + "  "
+					+ bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow));
 
-			if(bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow)) {
+			if (bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow)) {
 				throw new RuntimeException("Thời gian đặt phải từ thời điểm hiện tại.");
 //				return null;
 			}
-			int checkExists = this.bookingRepository.
-					CheckViewHasBookAtDate(bookingEntity.getViews().getId(), bookingEntity.getBooking_date());
+			int checkExists = this.bookingRepository.CheckViewHasBookAtDate(bookingEntity.getViews().getId(),
+					bookingEntity.getBooking_date());
 
-
-
-			if(checkExists > 0) {
+			if (checkExists > 0) {
 				throw new RuntimeException("Ngày đặt và view đã được booking trước đó.");
 			}
 
@@ -70,18 +69,13 @@ public class BookingServiceImpl implements BookingService {
 				return null;
 
 			bookingEntity.setCustomerDetail(customerEntity);
-
+			bookingEntity.setBooking_status(2);
 
 			return this.bookingRepository.save(bookingEntity);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-	}
-
-	@Override
-	public boolean delete(BookingEntity bookingEntity) {
-		return true;
 	}
 
 	@Override
@@ -106,7 +100,7 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public boolean changeStatus(int bookingStatus) {
+	public BookingEntity changeStatus(int id, int bookingStatus) {
 		List<Integer> statusList = new ArrayList<>();
 		statusList.add(0); // từ chối
 		statusList.add(1); // chấp nhận
@@ -114,15 +108,16 @@ public class BookingServiceImpl implements BookingService {
 		statusList.add(3); // hoàn thành
 		statusList.add(4); // hủy
 
-		Optional<BookingEntity> bookingEntity = this.bookingRepository.findById(bookingStatus);
+		Optional<BookingEntity> bookingEntity = this.bookingRepository.findById(id);
+		
 		if (bookingEntity.isEmpty()) {
 			System.out.println("không tìm tháy booking");
-			return false;
+			return null;
 		}
 
 		if (!statusList.contains(bookingStatus)) {
 			System.out.println("không có status");
-			return false;
+			return null;
 		}
 
 		// update status booking
@@ -131,7 +126,7 @@ public class BookingServiceImpl implements BookingService {
 
 		this.bookingRepository.save(bookingEntity.get());
 
-		return true;
+		return bookingEntity.get();
 	}
 
 	// filter booking theo ngày

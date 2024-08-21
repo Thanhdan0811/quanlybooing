@@ -60,11 +60,8 @@ public class CategoryController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy Category"));
 		}
-<<<<<<< HEAD
 		CategoryResponseDTO categoryDTO = mapper.map(cateEntity, CategoryResponseDTO.class);
-=======
-		CategoryResponseDetailDTO categoryDTO = mapper.map(cateEntity, CategoryResponseDetailDTO.class);
->>>>>>> branch 'main' of https://github.com/Thanhdan0811/quanlybooing.git
+
 		return ResponseEntity.ok(categoryDTO);
 	}
 

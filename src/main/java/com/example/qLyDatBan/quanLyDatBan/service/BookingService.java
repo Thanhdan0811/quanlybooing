@@ -6,7 +6,7 @@ import java.util.List;
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
 
 public interface BookingService extends BaseService<BookingEntity> {
-	boolean changeStatus(int bookingStatus);
+	BookingEntity changeStatus(int id, int bookingStatus);
 
 	List<BookingEntity> findBookingByDateCategory(String categoryName, Date date);
 }

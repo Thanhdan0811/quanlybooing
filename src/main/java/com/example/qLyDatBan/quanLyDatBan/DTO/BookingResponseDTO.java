@@ -1,6 +1,7 @@
 
 package com.example.qLyDatBan.quanLyDatBan.DTO;
 
+import com.example.qLyDatBan.quanLyDatBan.entity.CustomerDetailEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +14,12 @@ import java.sql.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingResponseDTO extends BaseDTO{
+public class BookingResponseDTO extends BaseDTO {
 
-    String name;
-    String phone;
-    String email;
-    ViewsEntity view;
-    int booking_status;
-    String addition_note;
-    Date booking_date;
+	CustomerDTO customerDetail;
+	ViewResponseDTO views;
+	int booking_status;
+	String addition_note;
+	Date booking_date;
 
 }

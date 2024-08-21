@@ -24,7 +24,6 @@ public class ViewsServiceImpl implements ViewsService {
 	public ViewsEntity save(ViewsEntity viewsEntity, String mode) {
 		try {
 			int id = viewsEntity.getCategory().getId();
-			System.out.println(id);
 			Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
 			viewsEntity.setCategory(null);
 			if (categoryEntity.isEmpty()) {

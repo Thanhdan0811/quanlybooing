@@ -6,15 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-
-public class ViewResponseDTO extends BaseDTO {
-
+@NoArgsConstructor
+@Builder
+public class CustomerDTO {
 	String name;
-	String desk_img;
-	String description;
-	CategoryDTO category;
-
+	String phone;
+	String email;
 }

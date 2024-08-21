@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.qLyDatBan.quanLyDatBan.DTO.Response;
-<<<<<<< HEAD
-=======
-import com.example.qLyDatBan.quanLyDatBan.DTO.ViewResponseDTO;
->>>>>>> branch 'main' of https://github.com/Thanhdan0811/quanlybooing.git
+//github.com/Thanhdan0811/quanlybooing.git
 import com.example.qLyDatBan.quanLyDatBan.DTO.ViewDTO;
+import com.example.qLyDatBan.quanLyDatBan.DTO.ViewResponseDTO;
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.mapper.Mapper;
@@ -46,7 +44,8 @@ public class ViewsController {
 		// maper DTO
 		List<ViewsEntity> viewEs = this.viewsService.findAll();
 		List<ViewResponseDTO> viewDs = new ArrayList<>();
-		if(viewEs == null) return null;
+		if (viewEs == null)
+			return null;
 		System.out.println("viewEs : " + viewEs.size());
 		for (ViewsEntity view : viewEs) {
 			viewDs.add(mapper.map(view, ViewResponseDTO.class));
@@ -56,27 +55,21 @@ public class ViewsController {
 
 	@PostMapping("/add-views")
 	public ResponseEntity<?> addViews(@RequestBody ViewDTO view) {
-<<<<<<< HEAD
-		
-		
-=======
->>>>>>> branch 'main' of https://github.com/Thanhdan0811/quanlybooing.git
-		System.out.println("View Body: " + view);
-<<<<<<< HEAD
-		ViewsEntity viewEntity = mapper.map(view, ViewsEntity.class);
-		CategoryEntity category = categoryService.findById(view.getCategory_id())
-				.orElseThrow(() -> new RuntimeException("Category not found with ID: " + view.getCategory_id()));
 
-		viewEntity.setCategory(category);
-=======
+		System.out.println("View Body: " + view);
+//		ViewsEntity viewEntity = mapper.map(view, ViewsEntity.class);
+//		CategoryEntity category = categoryService.findById(view.getCategory_id())
+//				.orElseThrow(() -> new RuntimeException("Category not found with ID: " + view.getCategory_id()));
+//
+//		viewEntity.setCategory(category);
+
 		ViewsEntity viewEntity = mapper.mapViewCreate(view, ViewsEntity.class);
->>>>>>> branch 'main' of https://github.com/Thanhdan0811/quanlybooing.git
 		ViewsEntity isCreated = this.viewsService.save(viewEntity, "add");
 		if (isCreated == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new Response<>(HttpStatus.BAD_REQUEST.value(), "Thông tin lỗi không thể tạo views"));
 		}
-		ViewDTO newView = mapper.map(isCreated, ViewDTO.class);
+		ViewResponseDTO newView = mapper.map(isCreated, ViewResponseDTO.class);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response<>(HttpStatus.OK.value(), "Views đã được thêm thành công.", newView));
 	}
