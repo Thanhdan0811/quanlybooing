@@ -35,6 +35,9 @@ public class BookingServiceImpl implements BookingService {
 	@Autowired
 	private DateUtil dateUtil;
 
+	@Autowired
+	MailService mailService;
+
 	@Override
 	public BookingEntity save(BookingEntity bookingEntity, String mode) {
 
@@ -109,7 +112,7 @@ public class BookingServiceImpl implements BookingService {
 		statusList.add(4); // hủy
 
 		Optional<BookingEntity> bookingEntity = this.bookingRepository.findById(id);
-		
+
 		if (bookingEntity.isEmpty()) {
 			System.out.println("không tìm tháy booking");
 			return null;
@@ -121,10 +124,14 @@ public class BookingServiceImpl implements BookingService {
 		}
 
 		// update status booking
+		BookingEntity booking = bookingEntity.get();
 
-		bookingEntity.get().setBooking_status(bookingStatus);
+		booking.setBooking_status(bookingStatus);
 
-		this.bookingRepository.save(bookingEntity.get());
+		this.bookingRepository.save(booking);
+		if (booking.getBooking_status() == 0 || booking.getBooking_status() == 1) {
+			mailService.sendMail(booking);
+		}
 
 		return bookingEntity.get();
 	}
