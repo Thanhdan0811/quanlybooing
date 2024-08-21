@@ -32,14 +32,16 @@ public class BookingController {
 	private Mapper mapper;
 
 	@GetMapping("/all")
-	public List<BookingResponseDTO> getAllBooking() {
+	public ResponseEntity<?> getAllBooking() {
 		List<BookingEntity> bookings = this.bookingService.findAll();
 		List<BookingResponseDTO> bookingsDTO = new ArrayList<>();
 
 		for (BookingEntity book : bookings) {
 			bookingsDTO.add(mapper.mapBookingResponseGetAll(book, BookingResponseDTO.class));
 		}
-		return bookingsDTO;
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new Response<>(HttpStatus.CREATED.value(), "Danh sách booking.", bookingsDTO));
+//		return bookingsDTO;
 	}
 
 	@PostMapping("/add-booking")

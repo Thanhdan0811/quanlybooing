@@ -75,6 +75,8 @@ public class BookingServiceImpl implements BookingService {
 
 			bookingEntity.setCustomerDetail(customerEntity);
 
+			bookingEntity.setBooking_status(2);
+
 			return this.bookingRepository.save(bookingEntity);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

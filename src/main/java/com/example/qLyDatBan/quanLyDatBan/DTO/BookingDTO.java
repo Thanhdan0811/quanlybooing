@@ -17,7 +17,7 @@ public class BookingDTO  {
 	String phone;
 	String email;
 	int view_id;
-	int booking_status;
+//	int booking_status;
 	String addition_note;
 	Date booking_date;
 
