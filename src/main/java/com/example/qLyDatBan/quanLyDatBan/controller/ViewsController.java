@@ -1,8 +1,12 @@
 package com.example.qLyDatBan.quanLyDatBan.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.qLyDatBan.quanLyDatBan.DTO.DateSearchViewDTO;
+import com.example.qLyDatBan.quanLyDatBan.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +36,7 @@ public class ViewsController {
 	private Mapper mapper;
 
 	@GetMapping("/all")
-	public List<ViewResponseDTO> getAllViews() {
+	public ResponseEntity<?> getAllViews() {
 		// maper DTO
 		List<ViewsEntity> viewEs = this.viewsService.findAll();
 		List<ViewResponseDTO> viewDs = new ArrayList<>();
@@ -41,7 +45,24 @@ public class ViewsController {
 		for (ViewsEntity view : viewEs) {
 			viewDs.add(mapper.map(view, ViewResponseDTO.class));
 		}
-		return viewDs;
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response<>(HttpStatus.OK.value(), "Danh sách views.", viewDs));
+	}
+
+	@PostMapping("/views-available")
+	public ResponseEntity<?> getAvailableViews(@RequestBody DateSearchViewDTO dateSearch) {
+		List<ViewsEntity> viewEs = this.viewsService
+				.findViewsInDate(DateUtil.convertISOStrToDateSql(dateSearch.getDate_search()).toLocalDate());
+		List<ViewResponseDTO> viewDs = new ArrayList<>();
+		if(viewEs == null) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new Response<>(HttpStatus.OK.value(), "không có danh sách views trống.", viewDs));
+		};
+		for (ViewsEntity view : viewEs) {
+			viewDs.add(mapper.map(view, ViewResponseDTO.class));
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response<>(HttpStatus.OK.value(), "Danh sách views trống.", viewDs));
 	}
 
 	@PostMapping("/add-views")

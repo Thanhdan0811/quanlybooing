@@ -29,4 +29,6 @@ public class ViewsEntity extends BaseEntity {
 	@JsonBackReference
 	private List<BookingEntity> booking;
 
+
+
 }

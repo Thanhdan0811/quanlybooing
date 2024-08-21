@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
@@ -22,8 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class BookingServiceImpl implements BookingService {
+	private final ViewsService viewsService;
+
 	@Autowired
-	private ViewsService viewsService;
+	public BookingServiceImpl(@Lazy ViewsService viewsService) {
+		this.viewsService = viewsService;
+	}
 
 	@Autowired
 	private BookingRepository bookingRepository;
@@ -132,5 +137,17 @@ public class BookingServiceImpl implements BookingService {
 		this.bookingRepository.save(bookingEntity.get());
 
 		return true;
+	}
+
+	@Override
+	public List<ViewsEntity> findAllViewByDate(LocalDate dateSearch) {
+		List<BookingEntity> listBooking = this.bookingRepository.findAllByDate(dateSearch);
+		List<ViewsEntity> viewsEntities = new ArrayList<>();
+
+		for(BookingEntity book: listBooking) {
+			viewsEntities.add(book.getViews());
+		}
+
+		return viewsEntities;
 	}
 }

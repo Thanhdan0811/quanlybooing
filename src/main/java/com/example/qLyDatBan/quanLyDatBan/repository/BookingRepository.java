@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface BookingRepository extends JpaRepository<BookingEntity, Integer> {
@@ -19,4 +21,10 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             nativeQuery = true)
     int CheckViewHasBookAtDate(@Param("viewsId") int view_id,
 			@Param("bookingDate") Date bookingDate);
+
+    @Query(value = "SELECT * " +
+            "FROM booking " +
+            "WHERE TRUNC(booking_date) = TRUNC(:dateSearch)",
+            nativeQuery = true)
+    List<BookingEntity> findAllByDate(@Param("dateSearch") LocalDate dateSearch);
 }

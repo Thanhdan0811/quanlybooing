@@ -51,7 +51,7 @@ public class Mapper {
 		return viewsEntity;
 	}
 
-	public BookingResponseDTO mapBookingResponse(BookingEntity sourceObj, Class<BookingResponseDTO> desType) {
+	public BookingResponseDTO mapBookingResponseGetAll(BookingEntity sourceObj, Class<BookingResponseDTO> desType) {
 		BookingResponseDTO booking = modelMapper.map(sourceObj, desType);
 		booking.setName(sourceObj.getCustomerDetail().getName());
 		booking.setPhone(sourceObj.getCustomerDetail().getPhone());

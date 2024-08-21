@@ -37,7 +37,7 @@ public class BookingController {
 		List<BookingResponseDTO> bookingsDTO = new ArrayList<>();
 
 		for (BookingEntity book : bookings) {
-			bookingsDTO.add(mapper.map(book, BookingResponseDTO.class));
+			bookingsDTO.add(mapper.mapBookingResponseGetAll(book, BookingResponseDTO.class));
 		}
 		return bookingsDTO;
 	}
