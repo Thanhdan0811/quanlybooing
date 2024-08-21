@@ -13,5 +13,5 @@ public class ViewDTO {
 	String name;
 	String desk_img;
 	String description;
-	int category;
+	int category_id;
 }

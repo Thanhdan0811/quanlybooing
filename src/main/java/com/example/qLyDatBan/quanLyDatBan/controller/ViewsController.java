@@ -50,10 +50,12 @@ public class ViewsController {
 
 	@PostMapping("/add-views")
 	public ResponseEntity<?> addViews(@RequestBody ViewDTO view) {
+		
+		
 		System.out.println("View Body: " + view);
 		ViewsEntity viewEntity = mapper.map(view, ViewsEntity.class);
-		CategoryEntity category = categoryService.findById(view.getCategory())
-				.orElseThrow(() -> new RuntimeException("Category not found with ID: " + view.getCategory()));
+		CategoryEntity category = categoryService.findById(view.getCategory_id())
+				.orElseThrow(() -> new RuntimeException("Category not found with ID: " + view.getCategory_id()));
 
 		viewEntity.setCategory(category);
 		ViewsEntity isCreated = this.viewsService.save(viewEntity, "add");
