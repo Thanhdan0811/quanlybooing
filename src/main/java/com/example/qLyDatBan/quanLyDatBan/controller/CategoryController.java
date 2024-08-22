@@ -22,6 +22,7 @@ import com.example.qLyDatBan.quanLyDatBan.DTO.CategoryDTO;
 import com.example.qLyDatBan.quanLyDatBan.DTO.CategoryResponseDTO;
 import com.example.qLyDatBan.quanLyDatBan.DTO.Response;
 import com.example.qLyDatBan.quanLyDatBan.DTO.ViewResponseDTO;
+import com.example.qLyDatBan.quanLyDatBan.DTO.ViewResponseNoCat;
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.mapper.Mapper;
@@ -44,7 +45,7 @@ public class CategoryController {
 
 	@GetMapping("/all")
 	public List<CategoryResponseDTO> getAllCategories() {
-		List<CategoryEntity> entity = categoryService.findAll();
+		List<CategoryEntity> entity = categoryService.findAllByIsDeleted(0);
 		List<CategoryResponseDTO> categories = new ArrayList<>();
 		for (CategoryEntity categoryEntity : entity) {
 			categories.add(mapper.map(categoryEntity, CategoryResponseDTO.class));
@@ -56,7 +57,7 @@ public class CategoryController {
 	@GetMapping("/detail-{id}")
 	public ResponseEntity<?> getCategoryById(@PathVariable int id) {
 		Optional<CategoryEntity> cateEntity = this.categoryService.findById(id);
-		if (cateEntity.isEmpty()) {
+		if (cateEntity.isEmpty() || (cateEntity.get().getIsDeleted() == 1)) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy Category"));
 		}
@@ -92,9 +93,9 @@ public class CategoryController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy category này."));
 		}
-		List<ViewResponseDTO> views = new ArrayList<>();
+		List<ViewResponseNoCat> views = new ArrayList<>();
 		for (ViewsEntity view : viewsEntity) {
-			views.add(mapper.map(view, ViewResponseDTO.class));
+			views.add(mapper.map(view, ViewResponseNoCat.class));
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(new Response<>(HttpStatus.OK.value(), "", views));
 	}

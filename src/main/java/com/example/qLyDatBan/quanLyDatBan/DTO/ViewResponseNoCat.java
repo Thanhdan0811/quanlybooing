@@ -5,16 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class CategoryResponseDetailDTO extends BaseDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ViewResponseNoCat extends BaseDTO {
 	String name;
+	String desk_img;
 	String description;
-	String img_path;
-	int isDeleted;
-	List<ViewResponseDTO> listViews;
+	CategoryDTO category;
 }

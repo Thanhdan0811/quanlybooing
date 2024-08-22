@@ -15,6 +15,7 @@ public class ViewResponseDTO extends BaseDTO {
 	String name;
 	String desk_img;
 	String description;
+	int isDeleted;
 	CategoryDTO category;
 
 }

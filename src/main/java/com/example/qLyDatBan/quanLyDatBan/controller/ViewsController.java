@@ -42,7 +42,7 @@ public class ViewsController {
 	@GetMapping("/all")
 	public List<ViewResponseDTO> getAllViews() {
 		// maper DTO
-		List<ViewsEntity> viewEs = this.viewsService.findAll();
+		List<ViewsEntity> viewEs = this.viewsService.findAllByIsDeleted(0);
 		List<ViewResponseDTO> viewDs = new ArrayList<>();
 		if (viewEs == null)
 			return null;

@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class CategoryDTO {
 	String name;
 	String description;
-
 	String img_path;
-
+	int isDeleted;
 }

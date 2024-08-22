@@ -47,6 +47,7 @@ public class ViewsServiceImpl implements ViewsService {
 		if (existing.isPresent()) {
 			ViewsEntity view = existing.get();
 			view.setIsDeleted(1);
+			viewsRepository.save(view);
 			return true;
 		}
 		return false;
