@@ -17,7 +17,7 @@ public class BookingResponseDTO extends BaseDTO{
     String name;
     String phone;
     String email;
-    ViewDTO views;
+    ViewResponseDTO views;
     int booking_status;
     String addition_note;
     Date booking_date;

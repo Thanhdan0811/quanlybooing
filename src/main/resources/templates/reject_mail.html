@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Rejection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            width: 100%;
+            background-color: #f4f4f4;
+            padding: 20px 0;
+        }
+
+        .email-content {
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #d9534f;
+            text-align: center;
+        }
+
+        .rejection-message {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #d9534f;
+        }
+
+        .details-row {
+            margin: 10px 0;
+        }
+
+        .details-label {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="email-content">
+        <h1>Booking Rejection</h1>
+        <p>
+            Dear <span th:text="${name}">Customer</span>,
+        </p>
+        <p>We regret to inform you that your booking has been rejected.
+            Please review the details below:</p>
+
+        <div class="rejection-message">
+            <div class="details-row">
+                <span class="details-label">Booking ID:</span> <span
+                    th:text="${booking_id}">123456</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Date:</span> <span
+                    th:text="${booking_date}">August 25, 2024</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Table:</span> <span th:text="${table}">Table
+						5</span>
+            </div>
+        </div>
+
+        <p>We apologize for any inconvenience caused. If you have any
+            questions or need further assistance, please feel free to contact us
+            at support@example.com.</p>
+    </div>
+</div>
+</body>
+</html>

@@ -20,6 +20,9 @@ public class ViewsEntity extends BaseEntity {
 	@Column(nullable = true)
 	private String description;
 
+	@Column()
+	private int isDeleted = 0;
+
 	@ManyToOne()
 	@JoinColumn(name = "category_id", nullable = false)
 	@JsonBackReference
@@ -29,6 +32,11 @@ public class ViewsEntity extends BaseEntity {
 	@JsonBackReference
 	private List<BookingEntity> booking;
 
-
+	@PrePersist
+	protected void onCreate() {
+		if (isDeleted == 0) {
+			isDeleted = 0; // This ensures that isDeleted is set to 0 before persisting if not already set
+		}
+	}
 
 }

@@ -27,4 +27,11 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             "WHERE TRUNC(booking_date) = TRUNC(:dateSearch)",
             nativeQuery = true)
     List<BookingEntity> findAllByDate(@Param("dateSearch") LocalDate dateSearch);
+
+
+    @Query(value = "SELECT * " + "FROM views v "
+            + "JOIN booking b ON b.views_id = v.id " + "WHERE b.booking_date != :date "
+            + "AND v.category_id = :category_id " + "AND b.booking_status != 1 "
+            + "ORDER BY v.id ASC", nativeQuery = true)
+    List<ViewsEntity> filterByDateCategory(@Param("category_id") int categoryId, @Param("date") Date date);
 }

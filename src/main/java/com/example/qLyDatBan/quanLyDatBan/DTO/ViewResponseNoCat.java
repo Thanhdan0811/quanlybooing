@@ -1,6 +1,5 @@
 package com.example.qLyDatBan.quanLyDatBan.DTO;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DateSearchViewDTO {
-    String date_search;
-    int category_id;
+public class ViewResponseNoCat extends BaseDTO {
+	String name;
+	String desk_img;
+	String description;
+	CategoryDTO category;
 }

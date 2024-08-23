@@ -26,7 +26,7 @@ import com.example.qLyDatBan.quanLyDatBan.service.ViewsService;
 
 @RestController
 @RequestMapping("/views")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class ViewsController {
 
 	@Autowired
@@ -61,8 +61,17 @@ public class ViewsController {
 		for (ViewsEntity view : viewEs) {
 			viewDs.add(mapper.map(view, ViewResponseDTO.class));
 		}
+		List<ViewResponseDTO> listViewCategoryId = new ArrayList<>();
+		int categoryIdSearch = dateSearch.getCategory_id();
+		for(ViewResponseDTO v : viewDs) {
+			if(v.getCategory().getId() == categoryIdSearch) {
+				listViewCategoryId.add(v);
+			}
+
+		}
+
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(new Response<>(HttpStatus.OK.value(), "Danh sách views trống.", viewDs));
+				.body(new Response<>(HttpStatus.OK.value(), "Danh sách views trống.", listViewCategoryId));
 	}
 
 	@PostMapping("/add-views")

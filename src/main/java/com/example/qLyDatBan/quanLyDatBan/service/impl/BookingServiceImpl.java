@@ -34,6 +34,9 @@ public class BookingServiceImpl implements BookingService {
 	private BookingRepository bookingRepository;
 
 	@Autowired
+	MailService mailService;
+
+	@Autowired
 	private CustomerDetailService cusDetailService;
 
 	@Override
@@ -111,7 +114,7 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public boolean changeStatus(int bookingStatus) {
+	public BookingEntity changeStatus(int id, int bookingStatus) {
 		List<Integer> statusList = new ArrayList<>();
 		statusList.add(0); // từ chối
 		statusList.add(1); // chấp nhận
@@ -119,26 +122,30 @@ public class BookingServiceImpl implements BookingService {
 		statusList.add(3); // hoàn thành
 		statusList.add(4); // hủy
 
-		Optional<BookingEntity> bookingEntity = this.bookingRepository.findById(bookingStatus);
+		Optional<BookingEntity> bookingEntity = this.bookingRepository.findById(id);
+
 		if (bookingEntity.isEmpty()) {
 			System.out.println("không tìm tháy booking");
-			return false;
+			return null;
 		}
 
 		if (!statusList.contains(bookingStatus)) {
 			System.out.println("không có status");
-			return false;
+			return null;
 		}
 
-		int viewStatus = bookingStatus == 1 ? 1 : 0;
+		// update status booking
 
-		// update status view
+		BookingEntity booking = bookingEntity.get();
 
-		bookingEntity.get().setBooking_status(bookingStatus);
+		booking.setBooking_status(bookingStatus);
 
-		this.bookingRepository.save(bookingEntity.get());
+		this.bookingRepository.save(booking);
+		if (booking.getBooking_status() == 0 || booking.getBooking_status() == 1) {
+			mailService.sendMail(booking);
+		}
 
-		return true;
+		return booking;
 	}
 
 	@Override
@@ -151,5 +158,38 @@ public class BookingServiceImpl implements BookingService {
 		}
 
 		return viewsEntities;
+	}
+
+	// filter booking theo ngày và id_category
+	@Override
+	public List<ViewsEntity> getViewsByDateCategory(int category_id, Date date) {
+		System.out.println("category_id " + category_id + "  " + date );
+		List<ViewsEntity> filteredViews = new ArrayList<>();
+		try {
+			List<ViewsEntity> results = bookingRepository.filterByDateCategory(category_id, date);
+
+			for (ViewsEntity result : results) {
+//				ViewsEntity view = new ViewsEntity();
+				System.out.println("id : " + result.getId());
+//				System.out.println("id : " + result);
+//				System.out.println("id : " + result);
+//				System.out.println("id : " + result);
+//				System.out.println("id : " + result);
+//
+//				view.setId((Integer) result[0]);
+//				view.setName((String) result[1]);
+//				view.setDesk_img((String) result[2]);
+//				view.setDescription((String) result[3]);
+//				view.setIsDeleted((Integer) result[4]);
+//				view.setCategory((Integer) result[5]);
+
+				filteredViews.add(result);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+		return filteredViews;
 	}
 }

@@ -30,7 +30,7 @@ import com.example.qLyDatBan.quanLyDatBan.service.impl.CategoryServiceImpl;
 
 @RestController
 @RequestMapping("/category")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class CategoryController {
 
 	@Autowired
