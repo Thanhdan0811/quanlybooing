@@ -86,12 +86,13 @@ public class CategoryController {
 	}
 
 	// Lấy các views từ 1 category cụ thể
+	// categoty không có view không dc trả cho front-end
 	@GetMapping("/getViews/{id}")
 	public ResponseEntity<?> getViewsByCategory(@PathVariable int id) {
 		List<ViewsEntity> viewsEntity = serviceImpl.getViewsById(id);
 		if (viewsEntity == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy category này."));
+					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Danh sách view rỗng."));
 		}
 		List<ViewResponseNoCat> views = new ArrayList<>();
 		for (ViewsEntity view : viewsEntity) {

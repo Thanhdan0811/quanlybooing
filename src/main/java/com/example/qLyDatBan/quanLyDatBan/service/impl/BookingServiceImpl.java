@@ -136,11 +136,27 @@ public class BookingServiceImpl implements BookingService {
 		return bookingEntity.get();
 	}
 
-	// filter booking theo ngày
+	// filter booking theo ngày và id_category
 	@Override
-	public List<BookingEntity> findBookingByDateCategory(String categoryName, Date date) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ViewsEntity> getViewsByDateCategory(int category_id, Date date) {
+		List<ViewsEntity> filteredViews = new ArrayList<>();
+		try {
+			List<Object[]> results = bookingRepository.filterByDateCategory(category_id, date);
+			for (Object[] result : results) {
+				ViewsEntity view = new ViewsEntity();
+				view.setId((Integer) result[0]);
+				view.setName((String) result[1]);
+				view.setDesk_img((String) result[2]);
+				view.setDescription((String) result[3]);
+				view.setIsDeleted((Integer) result[4]);
+				
+				filteredViews.add(view);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+		return filteredViews;
 	}
 
 }
