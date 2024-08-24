@@ -139,24 +139,31 @@ public class BookingServiceImpl implements BookingService {
 	// filter booking theo ngày và id_category
 	@Override
 	public List<ViewsEntity> getViewsByDateCategory(int category_id, Date date) {
-		List<ViewsEntity> filteredViews = new ArrayList<>();
-		try {
-			List<Object[]> results = bookingRepository.filterByDateCategory(category_id, date);
-			for (Object[] result : results) {
-				ViewsEntity view = new ViewsEntity();
-				view.setId((Integer) result[0]);
-				view.setName((String) result[1]);
-				view.setDesk_img((String) result[2]);
-				view.setDescription((String) result[3]);
-				view.setIsDeleted((Integer) result[4]);
-				
-				filteredViews.add(view);
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+//		List<ViewsEntity> bookedViews = new ArrayList<>();
+//		List<ViewsEntity> views = viewsService.findAllByIsDeleted(0);
+//		try {
+//			List<Object[]> results = bookingRepository.filterByDateCategory(category_id, date);
+//			for (Object[] result : results) {
+//				ViewsEntity view = new ViewsEntity();
+//				view.setId((Integer) result[0]);
+//				view.setName((String) result[1]);
+//				view.setDesk_img((String) result[2]);
+//				view.setDescription((String) result[3]);
+//				view.setIsDeleted((Integer) result[4]);
+//
+//				bookedViews.add(view);
+//			}
+//			if (views == null) {
+//				return null;
+//			}
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
 			return null;
-		}
-		return filteredViews;
+//		}
+//		List<ViewsEntity> result = new ArrayList<ViewsEntity>();
+//		for (ViewsEntity bookedView : bookedViews) {
+//			
+//		}
 	}
 
 }

@@ -1,15 +1,18 @@
 package com.example.qLyDatBan.quanLyDatBan.service.impl;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.repository.CategoryRepository;
 import com.example.qLyDatBan.quanLyDatBan.repository.ViewsRepository;
 import com.example.qLyDatBan.quanLyDatBan.service.ViewsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ViewsServiceImpl implements ViewsService {
@@ -71,7 +74,7 @@ public class ViewsServiceImpl implements ViewsService {
 	@Override
 	public List<ViewsEntity> findAllByIsDeleted(int number) {
 		List<ViewsEntity> views = viewsRepository.findAllByIsDeleted(number);
-		return views;
-
+		return views.stream().sorted(Comparator.comparing(ViewsEntity::getId)).collect(Collectors.toList());
 	}
+
 }

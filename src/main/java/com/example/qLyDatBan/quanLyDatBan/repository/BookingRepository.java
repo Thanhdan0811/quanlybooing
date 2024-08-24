@@ -32,7 +32,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
 
 	@Query(value = "SELECT v.id, v.name, v.desk_img, v.description, v.is_Deleted, v.category_id " + "FROM views v "
 			+ "JOIN booking b ON b.views_id = v.id " + "WHERE b.booking_date = :date "
-			+ "AND v.category_id = :category_id " + "AND b.booking_status != 2 "
+			+ "AND v.category_id = :category_id " + "AND b.booking_status = 1 AND v.is_deleted = 0"
 			+ "ORDER BY v.id ASC", nativeQuery = true)
 	List<Object[]> filterByDateCategory(@Param("category_id") int categoryId, @Param("date") Date date);
 
