@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ViewsService extends BaseService<ViewsEntity> {
 
-    List<ViewsEntity> findViewsInDate(LocalDate dateSearch);
+	List<ViewsEntity> findViewsInDate(LocalDate dateSearch);
 
+	List<ViewsEntity> findAllByIsDeleted(int number);
 }

@@ -3,7 +3,10 @@ package com.example.qLyDatBan.quanLyDatBan.service;
 import java.util.List;
 
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
+import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 
 public interface CategoryService extends BaseService<CategoryEntity> {
-	boolean findByIdAndUpload(int id, CategoryEntity categoryEntity);
+	public List<ViewsEntity> getViewsById(int id);
+
+	List<CategoryEntity> findAllByIsDeleted(int number);
 }

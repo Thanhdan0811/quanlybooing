@@ -7,13 +7,7 @@ import com.example.qLyDatBan.quanLyDatBan.DTO.CategoryDTO;
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
 
 public interface BaseService<T> {
-
-
-
-	// trả ra object để kiểm tra cho cả add và update
 	T save(T t, String mode);
-
-	boolean delete(T t);
 
 	boolean deleteById(int id);
 

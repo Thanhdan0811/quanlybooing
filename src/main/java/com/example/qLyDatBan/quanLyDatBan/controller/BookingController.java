@@ -25,8 +25,6 @@ import com.example.qLyDatBan.quanLyDatBan.service.BookingService;
 @CrossOrigin(origins = "*")
 public class BookingController {
 
-
-
 	@Autowired
 	private BookingService bookingService;
 
@@ -46,16 +44,19 @@ public class BookingController {
 //		return bookingsDTO;
 	}
 
+	// Tạo đơn từ phía khách hàng
 	@PostMapping("/add-booking")
 	public ResponseEntity<?> addBooking(@RequestBody BookingDTO bookingBody) {
 		try {
-			BookingEntity saveBooking = this.bookingService.save(mapper.mapBookingCreate(bookingBody, BookingEntity.class), "add");
+			BookingEntity saveBooking = this.bookingService
+					.save(mapper.mapBookingCreate(bookingBody, BookingEntity.class), "add");
 			if (saveBooking == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Booking không thành công"));
 			}
+			BookingResponseDTO newBooking = mapper.map(saveBooking, BookingResponseDTO.class);
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new Response<>(HttpStatus.CREATED.value(), "Booking đã được tạo"));
+					.body(new Response<>(HttpStatus.CREATED.value(), "Booking đã được tạo", newBooking));
 		} catch (RuntimeException e) {
 
 			String message = e.getMessage().replace("java.lang.RuntimeException:", "").trim();
@@ -65,6 +66,7 @@ public class BookingController {
 		}
 	}
 
+	// Thay đổi trạng thái
 	@PutMapping("/update-status")
 	public ResponseEntity<?> updateBookingStatus(@RequestParam int id, int status) {
 
@@ -86,7 +88,7 @@ public class BookingController {
 
 		Optional<BookingEntity> bookingEntity = this.bookingService.findById(id);
 
-		if(bookingEntity.isEmpty()) {
+		if (bookingEntity.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new Response<>(HttpStatus.NOT_FOUND.value(), "Không tìm thấy booking."));
 		}

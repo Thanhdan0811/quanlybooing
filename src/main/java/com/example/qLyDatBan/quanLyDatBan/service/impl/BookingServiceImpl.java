@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
@@ -17,27 +16,28 @@ import com.example.qLyDatBan.quanLyDatBan.repository.BookingRepository;
 import com.example.qLyDatBan.quanLyDatBan.service.BookingService;
 import com.example.qLyDatBan.quanLyDatBan.service.CustomerDetailService;
 import com.example.qLyDatBan.quanLyDatBan.service.ViewsService;
+import com.example.qLyDatBan.quanLyDatBan.utils.DateUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class BookingServiceImpl implements BookingService {
-	private final ViewsService viewsService;
 
 	@Autowired
-	public BookingServiceImpl(@Lazy ViewsService viewsService) {
-		this.viewsService = viewsService;
-	}
+	private ViewsService viewsService;
 
 	@Autowired
 	private BookingRepository bookingRepository;
 
 	@Autowired
-	MailService mailService;
+	private CustomerDetailService cusDetailService;
 
 	@Autowired
-	private CustomerDetailService cusDetailService;
+	private DateUtil dateUtil;
+
+	@Autowired
+	MailService mailService;
 
 	@Override
 	public BookingEntity save(BookingEntity bookingEntity, String mode) {
@@ -53,21 +53,17 @@ public class BookingServiceImpl implements BookingService {
 			// Check arrived time and expected time is available.
 			LocalDate dateNow = LocalDate.now();
 
-			System.out.println("CheckViewHasBookAtDate: " + bookingEntity.getBooking_date() +
-					"  " + dateNow +
-					"  " + bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow));
+			System.out.println("CheckViewHasBookAtDate: " + bookingEntity.getBooking_date() + "  " + dateNow + "  "
+					+ bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow));
 
-			if(bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow)) {
+			if (bookingEntity.getBooking_date().toLocalDate().isBefore(dateNow)) {
 				throw new RuntimeException("Thời gian đặt phải từ thời điểm hiện tại.");
 //				return null;
 			}
-			int checkExists = this.bookingRepository.
-					CheckViewHasBookAtDate(bookingEntity.getViews().getId(), bookingEntity.getBooking_date());
+			int checkExists = this.bookingRepository.CheckViewHasBookAtDate(bookingEntity.getViews().getId(),
+					bookingEntity.getBooking_date());
 
-
-
-
-			if(checkExists > 0) {
+			if (checkExists > 0) {
 				throw new RuntimeException("Ngày đặt và view đã được booking trước đó.");
 			}
 
@@ -85,11 +81,6 @@ public class BookingServiceImpl implements BookingService {
 			throw new RuntimeException(e);
 		}
 
-	}
-
-	@Override
-	public boolean delete(BookingEntity bookingEntity) {
-		return true;
 	}
 
 	@Override
@@ -153,7 +144,7 @@ public class BookingServiceImpl implements BookingService {
 		List<BookingEntity> listBooking = this.bookingRepository.findAllByDate(dateSearch);
 		List<ViewsEntity> viewsEntities = new ArrayList<>();
 
-		for(BookingEntity book: listBooking) {
+		for (BookingEntity book : listBooking) {
 			viewsEntities.add(book.getViews());
 		}
 
@@ -163,7 +154,7 @@ public class BookingServiceImpl implements BookingService {
 	// filter booking theo ngày và id_category
 	@Override
 	public List<ViewsEntity> getViewsByDateCategory(int category_id, Date date) {
-		System.out.println("category_id " + category_id + "  " + date );
+		System.out.println("category_id " + category_id + "  " + date);
 		List<ViewsEntity> filteredViews = new ArrayList<>();
 		try {
 			List<ViewsEntity> results = bookingRepository.filterByDateCategory(category_id, date);

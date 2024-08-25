@@ -3,6 +3,7 @@ package com.example.qLyDatBan.quanLyDatBan.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.repository.CategoryRepository;
+import com.example.qLyDatBan.quanLyDatBan.repository.ViewsRepository;
 import com.example.qLyDatBan.quanLyDatBan.service.CategoryService;
 
 @Service
@@ -17,6 +19,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private ViewsRepository viewRepository;
 
 	// add và update
 	// dùng mode để định nghĩa là add hay update
@@ -51,21 +56,21 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 	}
 
-	@Override
-	public boolean delete(CategoryEntity categoryEntity) {
-		Optional<CategoryEntity> existed = findById(categoryEntity.getId());
-		if (existed.isPresent()) {
-			categoryRepository.delete(categoryEntity);
-			return true;
-		}
-		return false;
-	}
-
+	// delete mềm
+	// 0 là đang sử dụng
+	// 1 là xoá
 	@Override
 	public boolean deleteById(int id) {
-		Optional<CategoryEntity> existed = findById(id);
-		if (existed.isPresent()) {
-			categoryRepository.deleteById(id);
+		Optional<CategoryEntity> existing = findById(id);
+		if (existing.isPresent()) {
+			CategoryEntity category = existing.get();
+			category.setIsDeleted(1);
+			List<ViewsEntity> views = this.getViewsById(id);
+			for (ViewsEntity viewsEntity : views) {
+				viewsEntity.setIsDeleted(1);
+				viewRepository.save(viewsEntity);
+			}
+			categoryRepository.save(category);
 			return true;
 		}
 		return false;
@@ -82,35 +87,22 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepository.findById(id);
 	}
 
-	// Cái này là update hay upload???
-	public boolean findByIdAndUpload(int id, CategoryEntity categoryEntity) {
-		Optional<CategoryEntity> categoryEn = this.findById(id);
-		if (categoryEn.isEmpty())
-			return false;
-
-		System.out.println("get id: " + categoryEn.get().getId());
-
-		if (!categoryEntity.getName().isEmpty()) {
-			categoryEn.get().setName(categoryEntity.getName());
-		}
-
-		if (!categoryEntity.getDescription().isEmpty()) {
-			categoryEn.get().setDescription(categoryEntity.getDescription());
-		}
-
-		this.categoryRepository.save(categoryEn.get());
-
-		return true;
-	}
-
+	// lấy danh sách bàn dựa trên category_id
 	public List<ViewsEntity> getViewsById(int id) {
 		Optional<CategoryEntity> category = this.findById(id);
-		if (!category.isPresent()) {
+		if (!category.isPresent() || (category.get().getIsDeleted() == 1)) {
 			return null;
 		}
 
 		CategoryEntity existing = category.get();
-		List<ViewsEntity> views = existing.getListViews();
+		List<ViewsEntity> views = existing.getListViews().stream().filter(view -> view.getIsDeleted() == 0)
+				.collect(Collectors.toList());
 		return views;
+	}
+
+	@Override
+	public List<CategoryEntity> findAllByIsDeleted(int number) {
+		List<CategoryEntity> deletedList = categoryRepository.findAllByIsDeleted(number);
+		return deletedList;
 	}
 }

@@ -1,19 +1,20 @@
 package com.example.qLyDatBan.quanLyDatBan.service.impl;
 
-import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.qLyDatBan.quanLyDatBan.entity.CategoryEntity;
 import com.example.qLyDatBan.quanLyDatBan.entity.ViewsEntity;
 import com.example.qLyDatBan.quanLyDatBan.repository.CategoryRepository;
 import com.example.qLyDatBan.quanLyDatBan.repository.ViewsRepository;
-import com.example.qLyDatBan.quanLyDatBan.service.BookingService;
 import com.example.qLyDatBan.quanLyDatBan.service.ViewsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ViewsServiceImpl implements ViewsService {
@@ -45,16 +46,16 @@ public class ViewsServiceImpl implements ViewsService {
 		}
 	}
 
-	@Override
-	public boolean delete(ViewsEntity viewsEntity) {
-		return true;
-	}
-
+	// delete mềm
+	// 0 là đang sử dụng
+	// 1 là xóa
 	@Override
 	public boolean deleteById(int id) {
-		Optional<ViewsEntity> existed = findById(id);
-		if (existed.isPresent()) {
-			viewsRepository.deleteById(id);
+		Optional<ViewsEntity> existing = findById(id);
+		if (existing.isPresent()) {
+			ViewsEntity view = existing.get();
+			view.setIsDeleted(1);
+			viewsRepository.save(view);
 			return true;
 		}
 		return false;
@@ -83,22 +84,28 @@ public class ViewsServiceImpl implements ViewsService {
 
 		LocalDate dateNow = LocalDate.now();
 
-		if(dateSearch.isBefore(dateNow)) {
+		if (dateSearch.isBefore(dateNow)) {
 			return resultView;
 		}
 
-		for(ViewsEntity view: listAllView) {
+		for (ViewsEntity view : listAllView) {
 			boolean hasBook = false;
-			for(ViewsEntity viewDate: listBookingDate) {
-				if(view.getId() == viewDate.getId()) {
+			for (ViewsEntity viewDate : listBookingDate) {
+				if (view.getId() == viewDate.getId()) {
 					hasBook = true;
 				}
 			}
-			if(!hasBook) {
+			if (!hasBook) {
 				resultView.add(view);
 			}
 		}
 
 		return resultView;
+	}
+
+	@Override
+	public List<ViewsEntity> findAllByIsDeleted(int number) {
+		List<ViewsEntity> views = viewsRepository.findAllByIsDeleted(number);
+		return views.stream().sorted(Comparator.comparing(ViewsEntity::getId)).collect(Collectors.toList());
 	}
 }

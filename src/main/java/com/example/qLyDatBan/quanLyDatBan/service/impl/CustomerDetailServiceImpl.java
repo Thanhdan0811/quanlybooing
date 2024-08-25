@@ -21,11 +21,6 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
 	}
 
 	@Override
-	public boolean delete(CustomerDetailEntity customerDetailEntity) {
-		return true;
-	}
-
-	@Override
 	public boolean deleteById(int id) {
 		Optional<CustomerDetailEntity> existed = findById(id);
 		if (existed.isPresent()) {
