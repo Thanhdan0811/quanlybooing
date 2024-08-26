@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.example.qLyDatBan.quanLyDatBan.entity.BookingEntity;
@@ -24,8 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BookingServiceImpl implements BookingService {
 
+	private final ViewsService viewsService;
+
 	@Autowired
-	private ViewsService viewsService;
+	public BookingServiceImpl(@Lazy ViewsService viewsService) {
+		this.viewsService = viewsService;
+	}
 
 	@Autowired
 	private BookingRepository bookingRepository;
@@ -33,8 +38,8 @@ public class BookingServiceImpl implements BookingService {
 	@Autowired
 	private CustomerDetailService cusDetailService;
 
-	@Autowired
-	private DateUtil dateUtil;
+//	@Autowired
+//	private DateUtil dateUtil;
 
 	@Autowired
 	MailService mailService;

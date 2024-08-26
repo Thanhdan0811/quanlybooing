@@ -66,9 +66,11 @@ public class CategoryServiceImpl implements CategoryService {
 			CategoryEntity category = existing.get();
 			category.setIsDeleted(1);
 			List<ViewsEntity> views = this.getViewsById(id);
-			for (ViewsEntity viewsEntity : views) {
-				viewsEntity.setIsDeleted(1);
-				viewRepository.save(viewsEntity);
+			if(views != null) {
+				for (ViewsEntity viewsEntity : views) {
+					viewsEntity.setIsDeleted(1);
+					viewRepository.save(viewsEntity);
+				}
 			}
 			categoryRepository.save(category);
 			return true;
