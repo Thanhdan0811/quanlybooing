@@ -2,6 +2,7 @@ package com.example.qLyDatBan.quanLyDatBan.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,10 @@ public class BookingController {
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllBooking() {
 		List<BookingEntity> bookings = this.bookingService.findAll();
+
+		bookings = bookings.stream().sorted((BookingEntity s1, BookingEntity s2) -> s2.getCreated_at().compareTo(s1.getCreated_at()))
+				.toList();;
+
 		List<BookingResponseDTO> bookingsDTO = new ArrayList<>();
 
 		for (BookingEntity book : bookings) {
